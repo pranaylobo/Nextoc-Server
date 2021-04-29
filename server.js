@@ -1,5 +1,7 @@
 
 var express = require('express');
+var nodemailer = require('nodemailer');
+
 const PORT =  process.env.PORT || 3000;
 const cors = require('cors')
 var firebase = require('firebase');
@@ -60,6 +62,38 @@ app.post('/signin', function (req, res) {
       // ..
     })
       
+
+
+
+})
+
+app.post('/employeemail', function (req, res) {
+
+
+  console.log(req.body.email)
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'nextocemployeeadded@gmail.com',
+      pass: 'REDcherry@1'
+    }
+  });
+  
+  var mailOptions = {
+    from: 'youremail@gmail.com',
+    to: req.body.email,
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!'
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+    
 
 
 

@@ -2,7 +2,7 @@
 var express = require('express');
 var nodemailer = require('nodemailer');
 
-const PORT =  process.env.PORT || 3000;
+const PORT =  3000;
 const cors = require('cors')
 var firebase = require('firebase');
 
@@ -43,6 +43,29 @@ app.use(function (req, res, next) {
 
   app.use(express.json());
 
+  app.get('/', function(req, res){
+    res.send("hello")
+  })
+
+
+  
+  app.get('/session', function(req, res){
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+
+        res.json({
+          message:user.email
+        })
+
+
+        console.log(user.email)
+      } else {
+        // No user is signed in.
+      }
+    });
+  })
+
 app.post('/signin', function (req, res) {
 
 
@@ -67,6 +90,32 @@ app.post('/signin', function (req, res) {
 
 })
 
+
+
+app.post('/signinfirebase', function (req, res) {
+
+
+  console.log(req.body.email,req.body.password)
+  firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
+  .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+
+    res.json({
+      message:true
+    })
+    // ...
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+  });
+
+    
+
+
+
+})
 app.post('/employeemail', function (req, res) {
 
 
